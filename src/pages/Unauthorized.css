@@ -1,0 +1,30 @@
+.unauthorized {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    text-align: center;
+}
+
+.unauthorized h1 {
+    color: #e74c3c;
+    font-size: 48px;
+}
+
+.unauthorized p {
+    color: #666;
+    font-size: 18px;
+    margin: 20px 0;
+}
+
+.unauthorized a {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.unauthorized a:hover {
+    text-decoration: underline;
+}
