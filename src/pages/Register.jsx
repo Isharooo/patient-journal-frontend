@@ -28,7 +28,6 @@ function Register() {
         e.preventDefault();
         setError('');
 
-        // Validering
         if (formData.password !== formData.confirmPassword) {
             setError('Passwords do not match');
             return;

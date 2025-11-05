@@ -6,7 +6,6 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    // Ladda användare från localStorage vid start
     useEffect(() => {
         const storedUser = localStorage.getItem('user');
         if (storedUser) {

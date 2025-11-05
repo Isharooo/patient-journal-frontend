@@ -20,8 +20,6 @@ function MessageDetails() {
         try {
             const data = await messageService.getMessageById(id);
             setMessage(data);
-
-            // Mark as read if recipient
             if (data.recipientId === user.id && !data.isRead) {
                 await messageService.markAsRead(id);
             }

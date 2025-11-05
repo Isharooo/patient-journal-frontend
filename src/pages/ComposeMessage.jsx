@@ -21,13 +21,11 @@ function ComposeMessage() {
 
   const loadRecipients = async () => {
     try {
-      // Om patient, visa läkare och personal
       if (user.role === 'PATIENT') {
         const doctors = await userService.getUsersByRole('DOCTOR');
         const staff = await userService.getUsersByRole('STAFF');
         setRecipients([...doctors, ...staff]);
       } else {
-        // Om läkare/personal, visa alla användare
         const allUsers = await userService.getAllUsers();
         setRecipients(allUsers.filter(u => u.id !== user.id));
       }

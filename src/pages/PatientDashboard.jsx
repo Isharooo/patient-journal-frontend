@@ -20,7 +20,6 @@ function PatientDashboard() {
 
     const loadPatientData = async () => {
         try {
-            // Hitta patient baserat pÃ¥ user ID
             const allPatients = await patientService.getAllPatients();
             const myPatient = allPatients.find(p => p.user.id === user.id);
 

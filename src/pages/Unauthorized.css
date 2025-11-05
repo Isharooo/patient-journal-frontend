@@ -5,26 +5,35 @@
     align-items: center;
     min-height: 100vh;
     text-align: center;
+    padding: 20px;
 }
 
 .unauthorized h1 {
-    color: #e74c3c;
+    color: #dc2626;
     font-size: 48px;
+    font-weight: 700;
+    margin-bottom: 16px;
 }
 
 .unauthorized p {
-    color: #666;
-    font-size: 18px;
-    margin: 20px 0;
+    color: #6b7280;
+    font-size: 16px;
+    margin-bottom: 24px;
 }
 
 .unauthorized a {
     color: #667eea;
     text-decoration: none;
-    font-weight: 600;
-    font-size: 18px;
+    font-weight: 500;
+    font-size: 16px;
+    padding: 10px 20px;
+    border: 1px solid #667eea;
+    border-radius: 6px;
+    transition: all 0.15s;
+    display: inline-block;
 }
 
 .unauthorized a:hover {
-    text-decoration: underline;
+    background: #667eea;
+    color: white;
 }
