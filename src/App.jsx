@@ -12,6 +12,10 @@ import Unauthorized from './pages/Unauthorized';
 import CreateEncounter from './pages/CreateEncounter';
 import CreateObservation from './pages/CreateObservation';
 import CreateCondition from './pages/CreateCondition';
+import Messages from './pages/Messages';
+import ComposeMessage from './pages/ComposeMessage';
+import MessageDetails from './pages/MessageDetails';
+
 import './App.css';
 
 function App() {
@@ -85,6 +89,32 @@ function App() {
                         element={
                             <ProtectedRoute allowedRoles={['DOCTOR', 'STAFF']}>
                                 <CreateCondition />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/messages"
+                        element={
+                            <ProtectedRoute>
+                                <Messages />
+                            </ProtectedRoute>
+                        }
+                    />
+
+                    <Route
+                        path="/messages/compose"
+                        element={
+                            <ProtectedRoute>
+                                <ComposeMessage />
+                            </ProtectedRoute>
+                        }
+                    />
+
+                    <Route
+                        path="/messages/:id"
+                        element={
+                            <ProtectedRoute>
+                                <MessageDetails />
                             </ProtectedRoute>
                         }
                     />
