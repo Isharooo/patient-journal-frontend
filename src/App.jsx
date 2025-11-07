@@ -4,7 +4,6 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Navbar from './components/Navbar';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import DoctorDashboard from './pages/DoctorDashboard';
 import PatientDashboard from './pages/PatientDashboard';
 import PatientList from './pages/PatientList';
 import PatientDetails from './pages/PatientDetails';
@@ -30,11 +29,7 @@ function App() {
 
                     <Route
                         path="/dashboard/doctor"
-                        element={
-                            <ProtectedRoute allowedRoles={['DOCTOR', 'STAFF']}>
-                                <DoctorDashboard />
-                            </ProtectedRoute>
-                        }
+                        element={<Navigate to="/patients" replace />}
                     />
 
                     <Route

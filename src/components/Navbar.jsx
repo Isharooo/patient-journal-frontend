@@ -18,18 +18,15 @@ function Navbar() {
     return (
         <nav className="navbar">
             <div className="navbar-brand">
-                <Link to="/">Patient Journal</Link>
+                Patient Journal
             </div>
             <div className="navbar-menu">
-                <Link to={user.role === 'PATIENT' ? '/dashboard/patient' : '/dashboard/doctor'}>
-                    Dashboard
+                <Link to={user.role === 'PATIENT' ? '/dashboard/patient' : '/patients'}>
+                    {user.role === 'PATIENT' ? 'Dashboard' : 'Patients'}
                 </Link>
                 <Link to="/messages">Messages</Link>
-                {(user.role === 'DOCTOR' || user.role === 'STAFF') && (
-                    <Link to="/patients">Patients</Link>
-                )}
                 <span className="navbar-user">
-          {user.firstName} {user.lastName} ({user.role})
+          {user.firstName} {user.lastName}
         </span>
                 <button onClick={handleLogout} className="logout-btn">
                     Logout

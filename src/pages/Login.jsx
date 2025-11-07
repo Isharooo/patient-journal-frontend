@@ -21,9 +21,8 @@ function Login() {
             const userData = await authService.login(username, password);
             login(userData);
 
-            // Navigera baserat pÃ¥ roll
             if (userData.role === 'DOCTOR' || userData.role === 'STAFF') {
-                navigate('/dashboard/doctor');
+                navigate('/patients');
             } else if (userData.role === 'PATIENT') {
                 navigate('/dashboard/patient');
             }

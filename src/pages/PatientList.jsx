@@ -5,7 +5,6 @@ import { patientService } from '../services/patientService';
 function PatientList() {
     const [patients, setPatients] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [searchTerm, setSearchTerm] = useState('');
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -24,31 +23,11 @@ function PatientList() {
         }
     };
 
-    const filteredPatients = patients.filter((patient) =>
-        patient.user.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        patient.user.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        patient.personalNumber.includes(searchTerm)
-    );
-
     if (loading) return <div style={{ padding: '20px' }}>Loading...</div>;
 
     return (
         <div style={{ padding: '20px', maxWidth: '1200px', margin: '0 auto' }}>
             <h1>Patients</h1>
-
-            <input
-                type="text"
-                placeholder="Search by name or personal number..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                style={{
-                    width: '100%',
-                    padding: '10px',
-                    marginBottom: '20px',
-                    border: '1px solid #ddd',
-                    borderRadius: '5px',
-                }}
-            />
 
             <div style={{ background: 'white', borderRadius: '5px', overflow: 'hidden' }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse' }}>
@@ -61,7 +40,7 @@ function PatientList() {
                     </tr>
                     </thead>
                     <tbody>
-                    {filteredPatients.map((patient) => (
+                    {patients.map((patient) => (
                         <tr key={patient.id} style={{ borderBottom: '1px solid #eee' }}>
                             <td style={{ padding: '15px' }}>
                                 {patient.user.firstName} {patient.user.lastName}

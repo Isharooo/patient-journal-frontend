@@ -3,19 +3,19 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { encounterService } from '../services/encounterService';
 import { patientService } from '../services/patientService';
 import { practitionerService } from '../services/practitionerService';
-import { useAuth } from '../context/AuthContext';
+import { locationService } from '../services/locationService';
 
 function CreateEncounter() {
     const { patientId } = useParams();
-    const { user } = useAuth();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [patient, setPatient] = useState(null);
     const [practitioners, setPractitioners] = useState([]);
+    const [locations, setLocations] = useState([]);
     const [formData, setFormData] = useState({
         patientId: patientId || '',
         practitionerId: '',
-        locationId: null,
+        locationId: '',
         notes: '',
     });
 
@@ -31,6 +31,9 @@ function CreateEncounter() {
             }
             const practitionersData = await practitionerService.getAllPractitioners();
             setPractitioners(practitionersData);
+
+            const locationsData = await locationService.getAllLocations();
+            setLocations(locationsData);
         } catch (error) {
             console.error('Failed to load data:', error);
         }
@@ -85,6 +88,24 @@ function CreateEncounter() {
                         {practitioners.map((p) => (
                             <option key={p.id} value={p.id}>
                                 {p.user.firstName} {p.user.lastName} - {p.specialization}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+
+                <div style={{ marginBottom: '15px' }}>
+                    <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
+                        Location
+                    </label>
+                    <select
+                        value={formData.locationId}
+                        onChange={(e) => setFormData({ ...formData, locationId: e.target.value })}
+                        style={{ width: '100%', padding: '8px', border: '1px solid #ddd', borderRadius: '3px' }}
+                    >
+                        <option value="">Select Location</option>
+                        {locations.map((location) => (
+                            <option key={location.id} value={location.id}>
+                                {location.name}
                             </option>
                         ))}
                     </select>
