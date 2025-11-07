@@ -15,6 +15,9 @@ import Messages from './pages/Messages';
 import ComposeMessage from './pages/ComposeMessage';
 import MessageDetails from './pages/MessageDetails';
 
+import HapiPatientList from './pages/HapiPatientList';
+import HapiPatientDetails from './pages/HapiPatientDetails';
+
 import './App.css';
 
 function App() {
@@ -27,6 +30,7 @@ function App() {
                     <Route path="/register" element={<Register />} />
                     <Route path="/unauthorized" element={<Unauthorized />} />
 
+                    {/* Original local database routes */}
                     <Route
                         path="/dashboard/doctor"
                         element={<Navigate to="/patients" replace />}
@@ -55,6 +59,25 @@ function App() {
                         element={
                             <ProtectedRoute allowedRoles={['DOCTOR', 'STAFF']}>
                                 <PatientDetails />
+                            </ProtectedRoute>
+                        }
+                    />
+
+                    {/* HAPI FHIR Routes */}
+                    <Route
+                        path="/hapi/patients"
+                        element={
+                            <ProtectedRoute allowedRoles={['DOCTOR', 'STAFF']}>
+                                <HapiPatientList />
+                            </ProtectedRoute>
+                        }
+                    />
+
+                    <Route
+                        path="/hapi/patients/:id"
+                        element={
+                            <ProtectedRoute allowedRoles={['DOCTOR', 'STAFF']}>
+                                <HapiPatientDetails />
                             </ProtectedRoute>
                         }
                     />

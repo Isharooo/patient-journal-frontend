@@ -22,8 +22,13 @@ function Navbar() {
             </div>
             <div className="navbar-menu">
                 <Link to={user.role === 'PATIENT' ? '/dashboard/patient' : '/patients'}>
-                    {user.role === 'PATIENT' ? 'Dashboard' : 'Patients'}
+                    {user.role === 'PATIENT' ? 'Dashboard' : 'Local DB'}
                 </Link>
+                {(user.role === 'DOCTOR' || user.role === 'STAFF') && (
+                    <Link to="/hapi/patients" style={{ color: '#667eea', fontWeight: 'bold' }}>
+                        HAPI FHIR
+                    </Link>
+                )}
                 <Link to="/messages">Messages</Link>
                 <span className="navbar-user">
           {user.firstName} {user.lastName}
