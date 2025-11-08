@@ -2,17 +2,15 @@ import api from './api';
 
 export const hapiPatientService = {
     getAllPatients: async () => {
-        const response = await api.get('/hapi/patients');
-        return response.data;
+        const { data } = await api.get('/hapi/patients');
+        return data;                // varje patient måste nu ha fhirId
     },
-
-    getPatientById: async (id) => {
-        const response = await api.get(`/hapi/patients/${id}`);
-        return response.data;
+    getPatientById: async (fhirId) => {
+        const { data } = await api.get(`/hapi/patients/${fhirId}`); // skicka sträng-id
+        return data;
     },
-
-    getPatientByPersonalNumber: async (personalNumber) => {
-        const response = await api.get(`/hapi/patients/personal-number/${personalNumber}`);
-        return response.data;
+    getPatientByPersonalNumber: async (pnr) => {
+        const { data } = await api.get(`/hapi/patients/personal-number/${pnr}`);
+        return data;
     },
 };
