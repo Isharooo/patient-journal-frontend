@@ -30,7 +30,6 @@ function App() {
                     <Route path="/register" element={<Register />} />
                     <Route path="/unauthorized" element={<Unauthorized />} />
 
-                    {/* Original local database routes */}
                     <Route
                         path="/dashboard/doctor"
                         element={<Navigate to="/patients" replace />}
@@ -63,7 +62,6 @@ function App() {
                         }
                     />
 
-                    {/* HAPI FHIR Routes */}
                     <Route
                         path="/hapi/patients"
                         element={
@@ -74,7 +72,7 @@ function App() {
                     />
 
                     <Route
-                        path="/hapi/patients/:id"
+                        path="/hapi/patients/pnr/:personalNumber"
                         element={
                             <ProtectedRoute allowedRoles={['DOCTOR', 'STAFF']}>
                                 <HapiPatientDetails />

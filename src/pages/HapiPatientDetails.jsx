@@ -6,13 +6,12 @@ import { hapiObservationService } from '../services/hapiObservationService';
 import { hapiConditionService } from '../services/hapiConditionService';
 
 function HapiPatientDetails() {
-    const { id } = useParams();
+    const { personalNumber } = useParams();
     const [patient, setPatient] = useState(null);
     const [encounters, setEncounters] = useState([]);
     const [observations, setObservations] = useState([]);
     const [conditions, setConditions] = useState([]);
 
-    // Vi delar upp loading och error för varje datatyp
     const [loadingPatient, setLoadingPatient] = useState(true);
     const [loadingRelatedData, setLoadingRelatedData] = useState(true);
 
@@ -24,10 +23,9 @@ function HapiPatientDetails() {
 
     useEffect(() => {
         loadPatientData();
-    }, [id]);
+    }, [personalNumber]);
 
     const loadPatientData = async () => {
-        // Återställ allt vid nyladdning
         setLoadingPatient(true);
         setLoadingRelatedData(true);
         setPatientError(null);
@@ -37,15 +35,18 @@ function HapiPatientDetails() {
         setObservations([]);
         setConditions([]);
 
-        // ---- STEG 1: FÖRSÖK HÄMTA PATIENTEN ----
-        // Detta är anropet som misslyckas just nu
+        let fhirId = null;
+
         try {
-            const patientData = await hapiPatientService.getPatientById(id);
+            const patientData = await hapiPatientService.getPatientByPersonalNumber(personalNumber);
             setPatient(patientData);
+
+            fhirId = patientData.fhirId;
+
         } catch (error) {
-            console.error('Failed to load HAPI Patient:', error);
+            console.error('Failed to load HAPI Patient by PNR:', error);
             if (error.response && error.response.status === 404) {
-                setPatientError(`Patient resource with ID ${id} was not found on the HAPI FHIR server (404).`);
+                setPatientError(`Patient with PNR ${personalNumber} was not found on the HAPI FHIR server (404).`);
             } else {
                 setPatientError('Failed to load patient data from HAPI FHIR server.');
             }
@@ -53,23 +54,27 @@ function HapiPatientDetails() {
             setLoadingPatient(false);
         }
 
-        // ---- STEG 2: HÄMTA ALLTID RELATERAD DATA ----
-        // Vi kör detta oavsett om steg 1 lyckades eller inte.
-        // Detta låter oss se journalen även om patient-resursen är trasig.
-        try {
-            const [encountersData, observationsData, conditionsData] = await Promise.all([
-                hapiEncounterService.getEncountersByPatientId(id),
-                hapiObservationService.getObservationsByPatientId(id),
-                hapiConditionService.getConditionsByPatientId(id)
-            ]);
 
-            setEncounters(encountersData);
-            setObservations(observationsData);
-            setConditions(conditionsData);
-        } catch (error) {
-            console.error('Failed to load related HAPI data:', error);
-            setRelatedDataError('Failed to load encounters, observations, or conditions.');
-        } finally {
+        if (fhirId) {
+            try {
+                const [encountersData, observationsData, conditionsData] = await Promise.all([
+                    hapiEncounterService.getEncountersByPatientId(fhirId),
+                    hapiObservationService.getObservationsByPatientId(fhirId),
+                    hapiConditionService.getConditionsByPatientId(fhirId)
+                ]);
+
+                setEncounters(encountersData);
+                setObservations(observationsData);
+                setConditions(conditionsData);
+            } catch (error) {
+                console.error('Failed to load related HAPI data:', error);
+                setRelatedDataError('Failed to load encounters, observations, or conditions.');
+            } finally {
+                setLoadingRelatedData(false);
+            }
+        } else {
+
+            setRelatedDataError('Cannot load related data because the patient profile could not be found by PNR.');
             setLoadingRelatedData(false);
         }
     };
@@ -97,11 +102,10 @@ function HapiPatientDetails() {
                     <strong>Data Source:</strong> HAPI FHIR Server
                 </p>
                 <p style={{ margin: '5px 0 0 0', fontSize: '0.9em' }}>
-                    FHIR Patient ID: {id}
+                    Personal Number: {personalNumber}
                 </p>
             </div>
 
-            {/* --- Patientinformation --- */}
             <div style={{ background: 'white', padding: '20px', borderRadius: '5px', marginBottom: '20px' }}>
                 <h2>Patient Information</h2>
                 {loadingPatient && <p>Loading patient info...</p>}
@@ -115,7 +119,6 @@ function HapiPatientDetails() {
 
                 {patient && (
                     <div style={{ marginTop: '15px' }}>
-                        {/* Använd den nya DTO-strukturen från "Ny Lösning" */}
                         <p><strong>Name:</strong> {patient.firstName} {patient.lastName}</p>
                         <p><strong>FHIR Resource ID:</strong> {patient.id}</p>
                         <p><strong>Personal Number:</strong> {patient.personalNumber || 'N/A'}</p>
@@ -126,7 +129,7 @@ function HapiPatientDetails() {
                 )}
             </div>
 
-            {/* --- Flikar för relaterad data --- */}
+
             <div style={{ marginBottom: '20px' }}>
                 <button
                     onClick={() => setActiveTab('encounters')}

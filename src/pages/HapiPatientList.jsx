@@ -86,7 +86,7 @@ function HapiPatientList() {
                             <td style={{ padding: '15px' }}>{patient.dateOfBirth || 'N/A'}</td>
                             <td style={{ padding: '15px' }}>
                                 <button
-                                    onClick={() => navigate(`/hapi/patients/${patient.id}`)}
+                                    onClick={() => navigate(`/hapi/patients/pnr/${patient.personalNumber}`)}
                                     style={{
                                         padding: '5px 15px',
                                         background: '#667eea',
