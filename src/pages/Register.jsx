@@ -12,6 +12,8 @@ function Register() {
         firstName: '',
         lastName: '',
         email: '',
+        personalNumber: '', 
+        dateOfBirth: '',    
     });
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
@@ -38,10 +40,22 @@ function Register() {
             return;
         }
 
+       
+        if (formData.role === 'PATIENT' && (!formData.personalNumber || !formData.dateOfBirth)) {
+            setError('Personal Number and Date of Birth are required for patients');
+            return;
+        }
+
         setLoading(true);
 
         try {
-            const { confirmPassword, ...userData } = formData;
+            const { confirmPassword: _confirmPassword, ...userData } = formData;
+            
+            if (userData.role !== 'PATIENT') {
+                delete userData.personalNumber;
+                delete userData.dateOfBirth;
+            }
+
             await authService.register(userData);
             alert('Registration successful! Please login.');
             navigate('/login');
@@ -144,6 +158,35 @@ function Register() {
                             disabled={loading}
                         />
                     </div>
+                    
+                    {formData.role === 'PATIENT' && (
+                        <>
+                            <div className="form-group">
+                                <label>Personal Number *</label>
+                                <input
+                                    type="text"
+                                    name="personalNumber"
+                                    value={formData.personalNumber}
+                                    onChange={handleChange}
+                                    required={formData.role === 'PATIENT'} 
+                                    disabled={loading}
+                                    placeholder="YYYYMMDD-XXXX"
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <label>Date of Birth *</label>
+                                <input
+                                    type="date"
+                                    name="dateOfBirth"
+                                    value={formData.dateOfBirth}
+                                    onChange={handleChange}
+                                    required={formData.role === 'PATIENT'} 
+                                    disabled={loading}
+                                />
+                            </div>
+                        </>
+                    )}
 
                     {error && <p className="error">{error}</p>}
 
